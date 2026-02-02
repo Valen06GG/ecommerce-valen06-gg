@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { Product } from "./product.interface";
 
 @Injectable()
 export class ProductsRespository {
@@ -7,7 +8,7 @@ export class ProductsRespository {
       id: 1,
       name: "Notebook Lenovo IdeaPad",
       description: "Notebook 15.6'' con procesador Intel i5 y 8GB de RAM",
-      price: 850000,
+      price: 85000,
       stock: true,
       imgUrl: "https://spacegamer.com.ar/img/Public/1058/67507-producto-1.jpg",
     },
@@ -29,7 +30,40 @@ export class ProductsRespository {
     },
     ];
 
-    getProducts() {
-        return this.products;
+    getProducts(page: number, limit: number) {
+      const start = (page -1) * limit;
+      const end = start + limit;
+        return this.products.slice(start, end);
     }
+
+    getById(id: number) {
+        return this.products.find((product) => product.id == id);
+    }
+
+    createProduct(product: Omit<Product, "id">): Product {
+      const id = this.products.length + 1;
+      this.products = [...this.products, { id, ...product }];
+      return { id, ...product };
+    }
+
+     updateProduct(id: number, data: Partial<Product>) {
+        const product = this.products.findIndex(p => p.id === id);
+        if (product === -1) {
+          return null;
+        }
+        this.products[product] = {
+          ...this.products[product],
+          ...data,
+        };
+        return this.products[product];
+      }
+
+      deleteProduct(id: number) {
+        const delProduct = this.products.findIndex(p => p.id ===id);
+        if(delProduct === -1) {
+          return false;
+        }
+        this.products.splice(delProduct, 1);
+        return true
+      }
 }

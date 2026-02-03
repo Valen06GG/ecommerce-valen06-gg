@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
+import { User } from "./user.interface";
 
 @Injectable()
 export class UsersRepository {
-    private users = [
+    private users: User[] = [
     {
       id: 1,
       email: "juan.perez@mail.com",
@@ -37,5 +38,36 @@ export class UsersRepository {
 
     async getUsers() {
         return this.users;
+    }
+
+    async getById(id: number) {
+        return this.users.find((user) => user.id === id);
+    }
+
+    async createUser(user: Omit<User, "id">): Promise<User> {
+        const id = this.users.length + 1;
+        this.users = [...this.users, { id, ...user }];
+        return { id, ...user };
+    }
+
+    updateUser(id: number, data: Partial<User>) {
+        const user = this.users.findIndex(user => user.id === id);
+        if(user === -1) {
+          return null;
+        }
+        this.users[user] = {
+          ...this.users[user],
+          ...data,
+        };
+        return this.users[user];
+    }
+
+    deleteUser(id: number) {
+        const delUser = this.users.findIndex(user => user.id === id);
+        if(delUser === -1) {
+          return false
+        };
+        this.users.splice(delUser, 1);
+        return true;
     }
 }

@@ -37,7 +37,7 @@ export class ProductsRespository {
     }
 
     getById(id: number) {
-        return this.products.find((product) => product.id == id);
+        return this.products.find((product) => product.id === id);
     }
 
     createProduct(product: Omit<Product, "id">): Product {

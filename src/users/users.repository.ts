@@ -36,8 +36,10 @@ export class UsersRepository {
     },
     ];
 
-    async getUsers() {
-        return this.users;
+    async getUsers(page: number, limit: number) {
+      const start = (page -1) * limit;
+      const end = start + limit;
+        return this.users.slice(start, end);
     }
 
     async getById(id: number) {
@@ -69,5 +71,9 @@ export class UsersRepository {
         };
         this.users.splice(delUser, 1);
         return true;
+    }
+
+    getUserByEamil(email: string) {
+      return this.users.find((user) => user.email === email);
     }
 }

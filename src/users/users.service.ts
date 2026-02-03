@@ -6,8 +6,8 @@ import { User } from "./user.interface";
 export class UsersService {
     constructor(private usersRepository: UsersRepository) {}
 
-    async getUsers() {
-        const users = await this.usersRepository.getUsers();
+    async getUsers(page: number, limit: number) {
+        const users = await this.usersRepository.getUsers(page, limit);
         return users.map(({ password, ...user }) => user);
     }
 

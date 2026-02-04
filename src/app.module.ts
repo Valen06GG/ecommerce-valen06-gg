@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeormConfig from "./config/typeorm";
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
       useFactory: (configService: ConfigService) => 
         configService.get<TypeOrmModuleOptions>("typeorm")!,
     }),
+    CategoryModule,
     UsersModule, 
     ProductsModule, 
     AuthModule

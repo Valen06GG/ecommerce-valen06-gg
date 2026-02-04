@@ -6,7 +6,7 @@ import {v4 as uuid} from "uuid";
 @Entity({
     name: "products",
 })
-export class Product {
+export class Products {
     @PrimaryGeneratedColumn("uuid")
     id: string = uuid()
 
@@ -42,9 +42,9 @@ export class Product {
     imgUrl: string
 
     @ManyToOne(() => Category, (category) => category.products)
-    category_id: Category;
+    category: Category;
 
     @ManyToMany(() => OrderDetail, (orderDetail) => orderDetail.products)
-    @JoinTable()
+    @JoinTable({ name: "category_id" })
     orderDetails: OrderDetail[];
 }

@@ -14,7 +14,7 @@ export class CreateProductDto {
   price: number;
 
   @IsBoolean()
-  stock: boolean;
+  stock: number;
 
   @IsString()
   imgUrl: string;

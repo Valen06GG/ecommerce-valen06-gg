@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Product } from "./product.interface";
+import productsData from "../data/products.json";
 
 @Injectable()
 export class ProductsRespository {
@@ -65,5 +66,28 @@ export class ProductsRespository {
         }
         this.products.splice(delProduct, 1);
         return true
+      }
+
+      seedProducts() {
+        for(const prod of productsData) {
+
+          const exists = this.products.find(p => p.name === prod.name);
+          if(!exists) continue;
+
+          const id = this.products.length + 1;
+
+          const newProduct: Product = {
+            id,
+            name: prod.name,
+            description: prod.description,
+            price: prod.price,
+            stock: true,
+            imgUrl: "default.jpg",
+          };
+
+          this.products.push(newProduct);
+        }
+
+        return "Products seeded";
       }
 }

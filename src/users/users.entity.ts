@@ -34,7 +34,7 @@ export class User {
       type: "int",
       nullable: false,
     })
-    phone: string
+    phone: number
 
     @Column({
       type: "varchar",
@@ -51,7 +51,7 @@ export class User {
       type: "varchar",
       length: 20,
     })
-    city: string
+    city: string 
 
     @OneToMany(() => Order, (order) => order.user)
     orders?: Order[]; 

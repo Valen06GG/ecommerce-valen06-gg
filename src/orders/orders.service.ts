@@ -10,7 +10,7 @@ export class OrdersService {
       return this.orderRepo.getOrder(id);
     }
 
-    addOrder(dto: CreateOrderDto) {
-      return this.orderRepo.addOrder(dto.userId, dto.product)
+    addOrder(userId: string, product: { id: string }[]) {
+      return this.orderRepo.addOrder(userId, product)
     }
 }

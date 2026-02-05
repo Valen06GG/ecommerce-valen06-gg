@@ -18,10 +18,10 @@ export class OrderDetail {
     })
     price: number
 
-    @OneToOne(() => Order)
-    @JoinTable()
+    @OneToOne(() => Order, (order) => order.orderDetail)
     order: Order;
 
-    @ManyToMany(() => Products, (product) => product.orderDetails)
-    products: Products[];
+    @ManyToMany(() => Products)
+    @JoinTable()
+    product: Products[];
 }

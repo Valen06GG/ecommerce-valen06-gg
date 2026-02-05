@@ -22,5 +22,5 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  city?: string;
+  city: string;
 }

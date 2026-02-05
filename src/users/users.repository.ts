@@ -1,79 +1,49 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "./user.interface";
+import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "./users.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class UsersRepository {
-    private users: User[] = [
-    {
-      id: 1,
-      email: "juan.perez@mail.com",
-      name: "Juan Pérez",
-      password: "123456",
-      address: "Av. Siempre Viva 742",
-      phone: "+54 11 1234-5678",
-      country: "Argentina",
-      city: "Buenos Aires",
-    },
-    {
-      id: 2,
-      email: "maria.gomez@mail.com",
-      name: "María Gómez",
-      password: "password123",
-      address: "Calle Falsa 123",
-      phone: "+54 11 8765-4321",
-      country: "Argentina",
-      city: "Córdoba",
-    },
-    {
-      id: 3,
-      email: "carlos.lopez@mail.com",
-      name: "Carlos López",
-      password: "qwerty",
-      address: "San Martín 456",
-      phone: "+54 261 555-0000",
-      country: "Argentina",
-      city: "Santa Cruz"
-    },
-    ];
+  constructor(
+    @InjectRepository(User)
+    private repo: Repository<User>,
+  ) {}
 
-    async getUsers(page: number, limit: number) {
-      const start = (page -1) * limit;
-      const end = start + limit;
-        return this.users.slice(start, end);
-    }
+  async getUsers(page: number, limit: number) {
+    return this.repo.find({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+  }
 
-    async getById(id: number) {
-        return this.users.find((user) => user.id === id);
-    }
+  async getById(id: string) {
+    return this.repo.findOne({
+      where: { id },
+    });
+  }
 
-    async createUser(user: Omit<User, "id">): Promise<User> {
-        const id = this.users.length + 1;
-        this.users = [...this.users, { id, ...user }];
-        return { id, ...user };
-    }
+  async createUser(user: Omit<User, "id">): Promise<User> {
+    const newUser = this.repo.create(user);
+    return this.repo.save(newUser);
+  }
 
-    updateUser(id: number, data: Partial<User>) {
-        const user = this.users.findIndex(user => user.id === id);
-        if(user === -1) {
-          return null;
-        }
-        this.users[user] = {
-          ...this.users[user],
-          ...data,
-        };
-        return this.users[user];
-    }
+  async updateUser(id: string, data: Partial<User>) {
+    const user = await this.getById(id);
+    if (!user) return null;
 
-    deleteUser(id: number) {
-        const delUser = this.users.findIndex(user => user.id === id);
-        if(delUser === -1) {
-          return false
-        };
-        this.users.splice(delUser, 1);
-        return true;
-    }
+    Object.assign(user, data);
+    return this.repo.save(user);
+  }
 
-    getUserByEamil(email: string) {
-      return this.users.find((user) => user.email === email);
-    }
+  async deleteUser(id: string) {
+    const result = await this.repo.delete(id);
+    return result.affected ? true : false;
+  }
+
+  async getUserByEmail(email: string) {
+    return this.repo.findOne({
+      where: { email },
+    });
+  }
 }

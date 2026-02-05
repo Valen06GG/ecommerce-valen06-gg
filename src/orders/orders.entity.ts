@@ -1,6 +1,6 @@
 import { OrderDetail } from "src/orderDetails/orderDetails.entity";
 import { User } from "src/users/users.entity";
-import { Column, Entity, JoinTable, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import {v4 as uuid} from "uuid";
 
 @Entity({
@@ -16,10 +16,10 @@ export class Order {
     })
     date: Date
 
-    @ManyToOne(() => User, (user) => user.orders_id)
+    @ManyToOne(() => User, (user) => user.orders)
     user: User;
     
-    @OneToOne(() => OrderDetail)
-    @JoinTable()
+    @OneToOne(() => OrderDetail, { cascade: true })
+    @JoinColumn()
     orderDetail: OrderDetail;
 }

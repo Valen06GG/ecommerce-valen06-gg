@@ -34,13 +34,13 @@ export class User {
       type: "int",
       nullable: false,
     })
-    phone: number
+    phone: string
 
     @Column({
       type: "varchar",
       length: 50,
     })
-    country: string
+    country?: string
 
     @Column({
         type: "text",
@@ -54,5 +54,5 @@ export class User {
     city: string
 
     @OneToMany(() => Order, (order) => order.user)
-    orders_id: Order[]; 
-}
+    orders?: Order[]; 
+}  

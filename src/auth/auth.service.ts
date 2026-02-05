@@ -8,11 +8,11 @@ export class AuthService {
         return "Get all Auth";
     }
 
-    singIn(email: string, password: string) {
-        if(!email || !password) {
+    async singIn(email: string, password: string) {
+        if(!email || !password) { 
             return "Se requiere email y password";
         };
-        const foundUser = this.usersRepository.getUserByEamil(email);
+        const foundUser = await this.usersRepository.getUserByEmail(email);
         if(!foundUser || foundUser.password !== password) {
             return "Email o password incorrectos";
         }

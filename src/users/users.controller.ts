@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import type { User } from "./user.interface";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { AuthGuard } from "src/auth/guards/auth.guards";
 
@@ -16,7 +15,7 @@ export class UsersController {
   @Get(":id")
   @UseGuards(AuthGuard)
   getUsesrById(@Param("id") id: string) {
-    return this.usersService.getUsersById(Number(id));
+    return this.usersService.getUsersById(String(id));
   }
 
   @Post()
@@ -27,12 +26,12 @@ export class UsersController {
   @Put(":id")
   @UseGuards(AuthGuard)
   updateUser(@Param("id") id: string, @Body() data: CreateUserDto) {
-    return this.usersService.updateUser(Number(id), data);
+    return this.usersService.updateUser(String(id), data);
   } 
 
   @Delete(":id")
   @UseGuards(AuthGuard)
   deleteUser(@Param("id") id: string) {
-    return this.usersService.deleteUser(Number(id));
+    return this.usersService.deleteUser(String(id));
   }
 }

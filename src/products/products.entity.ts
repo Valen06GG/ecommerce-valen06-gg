@@ -44,7 +44,6 @@ export class Products {
     @ManyToOne(() => Category, (category) => category.products)
     category: Category;
 
-    @ManyToMany(() => OrderDetail, (orderDetail) => orderDetail.products)
-    @JoinTable({ name: "category_id" })
+    @ManyToMany(() => OrderDetail, (orderDetail) => orderDetail.product)
     orderDetails: OrderDetail[];
 }

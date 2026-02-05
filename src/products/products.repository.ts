@@ -1,93 +1,63 @@
 import { Injectable } from "@nestjs/common";
-import { Product } from "./product.interface";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Products } from "./products.entity";
 import productsData from "../data/products.json";
 
 @Injectable()
-export class ProductsRespository {
-    private products = [
-    {
-      id: 1,
-      name: "Notebook Lenovo IdeaPad",
-      description: "Notebook 15.6'' con procesador Intel i5 y 8GB de RAM",
-      price: 85000,
-      stock: true,
-      imgUrl: "https://spacegamer.com.ar/img/Public/1058/67507-producto-1.jpg",
-    },
-    {
-      id: 2,
-      name: "Mouse Logitech G203",
-      description: "Mouse gamer RGB con sensor de alta precisión",
-      price: 25000,
-      stock: true,
-      imgUrl: "https://www.newtree.com.ar/Temp/App_WebSite/App_PictureFiles/Items/097855157553_800.jpg",
-    },
-    {
-      id: 3,
-      name: "Teclado Mecánico Redragon",
-      description: "Teclado mecánico RGB con switches blue",
-      price: 45000,
-      stock: false,
-      imgUrl: "https://logg.api.cygnus.market/static/logg/Global/Redragon_Kumara_red_switch_spanish_K552RGB_1R_SP/312f1c6881e647f0a524cbb03477b03a.webp",
-    },
-    ];
+export class ProductsRepository {
+  constructor(
+    @InjectRepository(Products)
+    private productsRepo: Repository<Products>,
+  ) {}
 
-    getProducts(page: number, limit: number) {
-      const start = (page -1) * limit;
-      const end = start + limit;
-        return this.products.slice(start, end);
-    }
+  async getProducts(page: number, limit: number) {
+    return this.productsRepo.find({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+  }
 
-    getById(id: number) {
-        return this.products.find((product) => product.id === id);
-    }
+  async getById(id: string) {
+    return this.productsRepo.findOne({
+      where: { id },
+    });
+  }
 
-    createProduct(product: Omit<Product, "id">): Product {
-      const id = this.products.length + 1;
-      this.products = [...this.products, { id, ...product }];
-      return { id, ...product };
-    }
+  async createProduct(data: Partial<Products>) {
+    const product = this.productsRepo.create(data);
+    return this.productsRepo.save(product);
+  }
 
-     updateProduct(id: number, data: Partial<Product>) {
-        const product = this.products.findIndex(p => p.id === id);
-        if (product === -1) {
-          return null;
-        }
-        this.products[product] = {
-          ...this.products[product],
-          ...data,
-        };
-        return this.products[product];
-      }
+  async updateProduct(id: string, data: Partial<Products>) {
+    await this.productsRepo.update(id, data);
+    return this.getById(id);
+  }
 
-      deleteProduct(id: number) {
-        const delProduct = this.products.findIndex(p => p.id ===id);
-        if(delProduct === -1) {
-          return false;
-        }
-        this.products.splice(delProduct, 1);
-        return true
-      }
+  async deleteProduct(id: string) {
+    const result = await this.productsRepo.delete(id);
+    return (result.affected ?? 0) > 0;
+  }
 
-      seedProducts() {
-        for(const prod of productsData) {
+  async seedProducts() {
+  for (const prod of productsData) {
+    const exists = await this.productsRepo.findOne({
+      where: { name: prod.name },
+    });
 
-          const exists = this.products.find(p => p.name === prod.name);
-          if(!exists) continue;
+    if (exists) continue;
 
-          const id = this.products.length + 1;
+    const newProduct = this.productsRepo.create({
+      name: prod.name,
+      description: prod.description,
+      price: prod.price,
+      stock: prod.stock,
+      imgUrl: "default.jpg",
+    });
 
-          const newProduct: Product = {
-            id,
-            name: prod.name,
-            description: prod.description,
-            price: prod.price,
-            stock: true,
-            imgUrl: "default.jpg",
-          };
+    await this.productsRepo.save(newProduct);
+  }
 
-          this.products.push(newProduct);
-        }
-
-        return "Products seeded";
-      }
+  return "Products seeded";
+}
 }

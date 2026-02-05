@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { UsersRepository } from "./users.repository";
-import { User } from "./user.interface";
-
+import { User } from "./users.entity";
 @Injectable()
 export class UsersService {
     constructor(private usersRepository: UsersRepository) {}
@@ -11,7 +10,7 @@ export class UsersService {
         return users.map(({ password, ...user }) => user);
     }
 
-    async getUsersById(id: number) {
+    async getUsersById(id: string) {
       const user = await this.usersRepository.getById(id);
       if (!user) return null;
       const { password, ...userWithoutPassword } = user;
@@ -22,7 +21,7 @@ export class UsersService {
       return this.usersRepository.createUser(user);
     }
 
-    async updateUser(id: number, data: Partial<User>) {
+    async updateUser(id: string, data: Partial<User>) {
         const updated = this.usersRepository.updateUser(id, data);
         if(!updated) {
             return { message: "Usuario no encontrado" };
@@ -30,7 +29,7 @@ export class UsersService {
         return "Usuario editado exitosamente";
     }
 
-    deleteUser(id: number) {
+    deleteUser(id: string) {
       const deleted = this.usersRepository.deleteUser(id);
       if(!deleted) {
         return { message: "Usuario no encontrado" };

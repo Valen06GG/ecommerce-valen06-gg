@@ -28,7 +28,7 @@ export class OrdersRepository {
         relations: {
           user: true,
           orderDetail: {
-            products: true,
+            product: true,
           },
         },
       });
@@ -63,7 +63,7 @@ export class OrdersRepository {
       }
 
       const detail = this.detailRepo.create({
-        products: available,
+        product: available,
         price: total,
       });
 
@@ -72,7 +72,6 @@ export class OrdersRepository {
       const order = this.orderRepo.create({
       user,
       orderDetail: detail,
-      date: new Date(),
     });
 
     await this.orderRepo.save(order);

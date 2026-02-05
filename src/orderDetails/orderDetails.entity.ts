@@ -4,7 +4,7 @@ import { Column, Entity, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn
 import {v4 as uuid} from "uuid";
 
 @Entity({
-    name: "orderDetails"
+    name: "orderdetails"
 })
 export class OrderDetail {
     @PrimaryGeneratedColumn("uuid")

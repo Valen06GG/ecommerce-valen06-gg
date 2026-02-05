@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeormConfig from "./config/typeorm";
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { CategoryModule } from './category/category.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -19,9 +20,10 @@ import { CategoryModule } from './category/category.module';
         configService.get<TypeOrmModuleOptions>("typeorm")!,
     }),
     CategoryModule,
-    UsersModule, 
     ProductsModule, 
-    AuthModule
+    OrdersModule,
+    UsersModule, 
+    AuthModule,
   ],
   controllers: [],
   providers: [],

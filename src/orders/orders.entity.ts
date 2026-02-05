@@ -14,7 +14,7 @@ export class Order {
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP",
     })
-    date: string
+    date: Date
 
     @ManyToOne(() => User, (user) => user.orders_id)
     user: User;

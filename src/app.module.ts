@@ -7,9 +7,11 @@ import typeormConfig from "./config/typeorm";
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { CategoryModule } from './category/category.module';
 import { OrdersModule } from './orders/orders.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
+    FilesModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeormConfig]

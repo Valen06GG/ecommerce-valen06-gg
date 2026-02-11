@@ -6,12 +6,14 @@ import {
   ParseFilePipe,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   UsePipes,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { FilesService } from "./files.service";
 import { MinSizeValidatorPipe } from "src/pipes/min-size-validator.pipe";
+import { AuthGuard } from "src/auth/guards/auth.guards";
 
 @Controller("files")
 export class FilesController {
@@ -20,6 +22,7 @@ export class FilesController {
     @Post("uploadImage/:id") 
     @UseInterceptors(FileInterceptor("file"))
     @UsePipes(MinSizeValidatorPipe)
+    @UseGuards(AuthGuard)
     uploadImage(@Param("id") id: string, @UploadedFile(
     new ParseFilePipe({
       validators: [

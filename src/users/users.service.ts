@@ -17,10 +17,6 @@ export class UsersService {
       return userWithoutPassword;
     }
 
-    async createUser(user: Omit<User, "id">): Promise<User> {
-      return this.usersRepository.createUser(user);
-    }
-
     async updateUser(id: string, data: Partial<User>) {
         const updated = this.usersRepository.updateUser(id, data);
         if(!updated) {

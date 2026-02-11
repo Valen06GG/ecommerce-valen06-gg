@@ -23,8 +23,8 @@ export class UsersRepository {
     });
   }
 
-  async createUser(user: Omit<User, "id">): Promise<User> {
-    const newUser = this.repo.create(user);
+  async signUp(userData: Partial<User>) {
+    const newUser = this.repo.create(userData);
     return this.repo.save(newUser);
   }
 

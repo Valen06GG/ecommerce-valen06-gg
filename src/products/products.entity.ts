@@ -1,6 +1,6 @@
 import { Category } from "src/category/category.entity";
 import { OrderDetail } from "src/orderDetails/orderDetails.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import {v4 as uuid} from "uuid";
 
 @Entity({

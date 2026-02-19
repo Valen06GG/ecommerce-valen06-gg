@@ -15,7 +15,6 @@ export class ProductsService {
     private categoryRepo: Repository<Category>,
   ) {}
 
-  // GET con paginado
   async getProducts(page: number = 1, limit: number = 5) {
     return this.productRepo.find({
       skip: (page - 1) * limit,
@@ -23,8 +22,7 @@ export class ProductsService {
       relations: ["category"],
     });
   }
-
-  // GET by id
+  
   async getProductsById(id: string) {
     return this.productRepo.findOne({
       where: { id },
@@ -32,13 +30,11 @@ export class ProductsService {
     });
   }
 
-  // CREATE
   async createProduct(data: Partial<Products>) {
     const product = this.productRepo.create(data);
     return this.productRepo.save(product);
   }
 
-  // UPDATE
   async updateProduct(id: string, data: Partial<Products>) {
     const product = await this.productRepo.findOneBy({ id });
 
@@ -52,7 +48,6 @@ export class ProductsService {
     return { id };
   }
 
-  // DELETE
   async deleteProduct(id: string) {
     const product = await this.productRepo.findOneBy({ id });
 
@@ -65,18 +60,15 @@ export class ProductsService {
     return { id };
   }
 
-  // 🌱 SEED REAL
   async seedProducts() {
     for (const prod of productsData) {
 
-      // evitar duplicados
       const exists = await this.productRepo.findOne({
         where: { name: prod.name },
       });
 
       if (exists) continue;
 
-      // buscar categoría
       const category = await this.categoryRepo.findOne({
         where: { name: prod.category },
       });

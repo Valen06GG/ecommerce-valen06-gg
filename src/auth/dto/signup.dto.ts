@@ -2,13 +2,11 @@ import { Type } from "class-transformer";
 import {
   IsEmail,
   IsString,
-  MinLength,
   Matches,
   Length,
   IsNumber,
   IsNotEmpty,
   IsOptional,
-  MaxLength,
 } from "class-validator";
 
 export class SignUpDto {

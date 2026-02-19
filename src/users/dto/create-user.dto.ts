@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Length, Matches } from "class-validator";
+import { IsEmail, IsEmpty, IsNotEmpty, IsNumber, IsOptional, IsString, Length, Matches } from "class-validator";
 
 export class CreateUserDto {
   @IsEmail()
@@ -21,6 +21,9 @@ export class CreateUserDto {
   @IsString()
   @Length(3, 80)
   address: string;
+
+  @IsEmpty()
+  isAdmin: boolean;
 
   @IsNotEmpty()
   @Type(() => Number)

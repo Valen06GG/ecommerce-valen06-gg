@@ -13,7 +13,7 @@ export class CreateProductDto {
   @IsNumber()
   price: number;
 
-  @IsBoolean()
+  @IsNumber()
   stock: number;
 
   @IsString()

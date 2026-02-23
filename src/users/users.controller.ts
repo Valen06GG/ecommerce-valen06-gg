@@ -5,10 +5,13 @@ import { AuthGuard } from "src/auth/guards/auth.guards";
 import { RolesGuard } from "src/auth/guards/roles.guards";
 import { Roles } from "src/decorators/roles.decorator";
 import { Role } from "src/roles.enum";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Users")
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  @ApiBearerAuth()
   @Get()
   @Roles(Role.Admin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -17,7 +20,7 @@ export class UsersController {
   }
 
   @Get(":id")
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard) 
   getUsesrById(@Param("id", new ParseUUIDPipe()) id: string) {
     return this.usersService.getUsersById(id);
   }
